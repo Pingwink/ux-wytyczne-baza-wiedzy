@@ -11,6 +11,7 @@ Uporządkowany zbiór **konkretnych, źródłowo udokumentowanych wytycznych** d
 
 - [Mapa wiedzy](#-mapa-wiedzy)
 - [Struktura repozytorium](#-struktura-repozytorium)
+- [Autorski Skill dla Agentów AI (Audyt Jedną Komendą)](#-autorski-skill-dla-agentów-ai-audyt-jedną-komendą)
 - [Jak korzystać z bazy](#-jak-korzystać-z-bazy)
 - [System identyfikatorów](#-system-identyfikatorów)
 - [Ścieżki czytania wg roli](#-ścieżki-czytania-wg-roli)
@@ -72,6 +73,7 @@ flowchart TD
 | 10 | Etyka, zaufanie, prywatność | [etyka-i-zaufanie.md](docs/10-etyka-i-zaufanie/etyka-i-zaufanie.md) | `ETY` | RODO, DSA, EDPB, Stanford |
 | 11 | Badania i testowanie | [badania-i-testowanie.md](docs/11-badania-i-testowanie/badania-i-testowanie.md) | `BAD` | NN/g, ISO, W3C WCAG-EM |
 | ✅ | Checklista wdrożeniowa | [CHECKLISTA.md](CHECKLISTA.md) | — | odwołania do ID |
+| 🤖 | Skill AI: Audyt UX jedną komendą | [SKILL.md](.agents/skills/ux-audit-checklista/SKILL.md) | — | 59 kryteriów + skaner Python |
 | 📚 | Wykaz źródeł | [ZRODLA.md](ZRODLA.md) | — | — |
 
 ---
@@ -84,6 +86,12 @@ flowchart TD
 ├── CHECKLISTA.md                 ← skrócona lista kontrolna z odnośnikami do wytycznych
 ├── ZRODLA.md                     ← wykaz źródeł pogrupowany wg typu i wiarygodności
 ├── CONTRIBUTING.md               ← zasady dodawania i aktualizowania wytycznych
+├── .agents/
+│   └── skills/
+│       └── ux-audit-checklista/  ← autorski skill dla agentów AI (audyt UX i WCAG jedną komendą)
+│           ├── SKILL.md
+│           ├── scripts/audit_scanner.py
+│           └── references/
 ├── docs/
 │   ├── 01-podstawy/
 │   ├── 02-dostepnosc/            ← 4 pliki: przegląd, kryteria, ARIA, prawo
@@ -98,6 +106,23 @@ flowchart TD
 │   └── 11-badania-i-testowanie/
 └── weryfikacja/                  ← raporty weryfikacji faktów (status każdej wytycznej)
 ```
+
+---
+
+## 🤖 Autorski Skill dla Agentów AI (Audyt Jedną Komendą)
+
+Repozytorium zawiera gotowy skill [`.agents/skills/ux-audit-checklista/`](.agents/skills/ux-audit-checklista/SKILL.md) zgodny ze standardem Antigravity / Claude Code / Cursor, który pozwala przeprowadzić kompleksowy audyt UX i dostępności (WCAG 2.2 AA) dowolnej strony internetowej **jedną komendą**:
+
+```text
+/ux-audit-checklista <ścieżka_lub_URL> "Persona: <opis persony>"
+```
+
+Skill automatycznie:
+1. Tworzy profil **Persony badawczej** i planuje ścieżkę pokrywającą **100% ekranów/widoków**,
+2. Uruchamia skaner techniczny [`audit_scanner.py`](.agents/skills/ux-audit-checklista/scripts/audit_scanner.py) (mierzący kontrasty WCAG 2.2, semantykę HTML/ARIA, obrazy i higienę produkcyjną),
+3. Generuje zrzuty ekranu każdego etapu ścieżki użytkownika,
+4. Weryfikuje wszystkie **59 punktów z [`CHECKLISTA.md`](CHECKLISTA.md)** ([pełna matryca 59 kryteriów](.agents/skills/ux-audit-checklista/references/checklista-59-kryteriow.md)),
+5. Zestawia listę błędów z wagami (**Severity 1–4**) i gotowym kodem naprawczym (**Proponowane Fixy**) w formatach `.md`, `.html` oraz `.docx` (gotowym do importu w Canva Docs).
 
 ---
 
